@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#172554">
+  <title>Controle de 400 vagas</title>
+  <link rel="stylesheet" href="styles.css">
+  <script type="module" src="app.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div>
+      <p class="eyebrow">PAINEL COMPARTILHADO</p>
+      <h1>Controle de vagas</h1>
+      <p class="sub">Acompanhe os 400 números em tempo real.</p>
+    </div>
+    <button id="adminToggle" class="button button-outline" type="button">Área administrativa</button>
+  </header>
+
+  <main class="container">
+    <section class="notice" id="connectionNotice">Conectando ao banco de dados…</section>
+
+    <section class="stats" aria-label="Resumo">
+      <article class="stat"><span>Total</span><strong id="totalCount">400</strong></article>
+      <article class="stat"><span>Ocupados</span><strong id="occupiedCount">0</strong></article>
+      <article class="stat"><span>Disponíveis</span><strong id="availableCount">400</strong></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-heading">
+        <div>
+          <h2>Números</h2>
+          <p>Toque em um número para consultar sua situação.</p>
+        </div>
+        <div class="legend">
+          <span><i class="dot free"></i>Disponível</span>
+          <span><i class="dot busy"></i>Ocupado</span>
+        </div>
+      </div>
+      <div class="toolbar">
+        <input id="numberSearch" type="search" inputmode="numeric" maxlength="3" placeholder="Buscar número (ex.: 025)" aria-label="Buscar número">
+        <select id="statusFilter" aria-label="Filtrar números">
+          <option value="all">Todos</option>
+          <option value="free">Disponíveis</option>
+          <option value="busy">Ocupados</option>
+        </select>
+      </div>
+      <div id="numbersGrid" class="numbers-grid" aria-live="polite"></div>
+    </section>
+
+    <section class="panel">
+      <h2>Cadastrar participante</h2>
+      <p class="muted">Informe os dados e escolha um ou mais números disponíveis.</p>
+      <form id="reservationForm">
+        <label>Nome completo
+          <input id="participantName" type="text" maxlength="90" autocomplete="name" required placeholder="Nome do participante">
+        </label>
+        <label>Telefone
+          <input id="participantPhone" type="tel" maxlength="25" autocomplete="tel" required placeholder="(00) 00000-0000">
+        </label>
+        <label>Números escolhidos
+          <input id="chosenNumbers" type="text" inputmode="numeric" required placeholder="Ex.: 001, 015, 120">
+        </label>
+        <p class="hint">Separe os números por vírgula. Também é possível selecionar números tocando na grade.</p>
+        <div id="selectionSummary" class="selection-summary">Nenhum número selecionado.</div>
+        <button class="button button-primary full" id="reserveButton" type="submit">Confirmar cadastro e reserva</button>
+      </form>
+    </section>
+
+    <section class="panel" id="adminPanel" hidden>
+      <div class="section-heading">
+        <div>
+          <h2>Área administrativa</h2>
+          <p class="muted">Somente a conta administrativa pode liberar números.</p>
+        </div>
+        <button id="adminLogout" class="button button-outline" type="button" hidden>Sair</button>
+      </div>
+      <form id="adminLoginForm" class="admin-login">
+        <label>E-mail administrativo
+          <input id="adminEmail" type="email" autocomplete="username" required placeholder="Seu e-mail de administradora">
+        </label>
+        <label>Senha administrativa
+          <input id="adminPassword" type="password" autocomplete="current-password" required placeholder="Senha cadastrada no Firebase">
+        </label>
+        <button class="button button-primary full" type="submit">Entrar como administradora</button>
+      </form>
+      <p id="adminStatus" class="hint">Entre com a conta administrativa para liberar ou excluir cadastros.</p>
+    </section>
+  </main>
+
+  <dialog id="numberDialog">
+    <div class="dialog-head">
+      <h2 id="dialogTitle">Número</h2>
+      <button id="closeDialog" class="icon-button" type="button" aria-label="Fechar">×</button>
+    </div>
+    <div id="dialogContent"></div>
+    <div id="dialogActions" class="dialog-actions"></div>
+  </dialog>
+
+  <footer>Controle compartilhado • Os dados ficam no Firebase, não apenas neste celular.</footer>
+</body>
+</html>

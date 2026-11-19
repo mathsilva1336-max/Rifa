@@ -1,0 +1,107 @@
+CONTROLE DE 400 VAGAS — GUIA PARA CONFIGURAR PELO CELULAR
+=======================================================
+
+IMPORTANTE
+- Este pacote é a interface e as regras do banco. Ele só funcionará depois de conectado ao seu projeto Firebase.
+- Não publique antes de substituir os campos de configuração.
+- O sistema armazena nome e telefone. Compartilhe o link apenas com as pessoas autorizadas.
+- O sistema foi estruturado como cadastro/controle de vagas numeradas, sem sorteio.
+- Não coloque sua senha administrativa dentro dos arquivos. Ela deve ser criada no Firebase Authentication.
+
+PARTE 1 — CRIAR O PROJETO FIREBASE
+1. No Chrome do Android, acesse https://console.firebase.google.com/
+2. Entre com sua conta Google.
+3. Toque em "Adicionar projeto" e dê um nome, por exemplo: controle-400-vagas.
+4. Você pode desativar o Google Analytics para simplificar. Conclua a criação.
+5. Na página do projeto, toque no ícone da engrenagem > Configurações do projeto.
+6. Em "Seus apps", toque no ícone Web </>. Dê um apelido e registre o app.
+7. O Firebase mostrará um bloco chamado firebaseConfig. Guarde os valores apiKey, authDomain, projectId e appId.
+
+PARTE 2 — ATIVAR OS ACESSOS
+1. No menu do Firebase, abra "Authentication" > "Começar".
+2. Em "Sign-in method" / "Método de login", ative:
+   - Anônimo (Anonymous)
+   - E-mail/senha (Email/Password)
+3. Em "Users" / "Usuários", adicione um usuário com o e-mail que será da administradora e uma senha forte.
+4. Confirme o e-mail, se o Firebase solicitar.
+5. Guarde o e-mail e a senha em local seguro. Não compartilhe a senha com os outros três participantes.
+
+PARTE 3 — CRIAR O BANCO
+1. Abra "Firestore Database" no menu do Firebase.
+2. Toque em "Criar banco de dados".
+3. Escolha o modo de produção.
+4. Selecione uma localização próxima dos usuários, se disponível. A localização do banco não poderá ser alterada depois.
+5. Conclua. Não crie coleções manualmente; o sistema cria a coleção "reservas" quando o primeiro cadastro for salvo.
+
+PARTE 4 — CONFIGURAR AS REGRAS
+1. No Firestore Database, abra a aba "Regras".
+2. Apague o texto de exemplo.
+3. Abra o arquivo firestore.rules deste pacote.
+4. Copie todo o conteúdo e cole no editor das regras do Firebase.
+5. Substitua COLOQUE_AQUI_O_EMAIL_ADMINISTRATIVO pelo e-mail exato da administradora.
+6. Toque em "Publicar".
+7. Confira se a regra publicada contém seu e-mail, sem espaços extras.
+
+PARTE 5 — CONECTAR O SITE AO FIREBASE
+1. Abra app.js em um editor de texto no celular (por exemplo, Acode).
+2. No início do arquivo, localize o objeto firebaseConfig.
+3. Substitua os quatro valores COLE_AQUI... pelos valores copiados na Parte 1.
+   Exemplo: apiKey: "sua-chave", authDomain: "seu-projeto.firebaseapp.com",
+   projectId: "seu-projeto", appId: "seu-app-id".
+4. Na linha ADMIN_EMAIL, coloque o e-mail administrativo entre aspas.
+5. Salve o arquivo.
+6. Não altere os endereços de importação do Firebase nem o restante do JavaScript.
+
+PARTE 6 — PUBLICAR GRATUITAMENTE NO GITHUB PAGES
+1. Acesse https://github.com/ no Chrome e crie uma conta gratuita, se ainda não tiver.
+2. Crie um repositório novo. Nome sugerido: controle-400-vagas.
+3. Deixe o repositório público e toque em Create repository.
+4. Abra o repositório e use Add file > Upload files.
+5. Envie os três arquivos: index.html, styles.css e app.js.
+   (O firestore.rules e este guia são para configuração; não precisam ficar no site.)
+6. Confirme em Commit changes.
+7. No repositório, abra Settings > Pages.
+8. Em Build and deployment, selecione Deploy from a branch.
+9. Escolha branch main e pasta /(root), depois Save.
+10. Aguarde alguns minutos. O GitHub mostrará o endereço do site, parecido com:
+    https://SEU-USUARIO.github.io/controle-400-vagas/
+11. Abra esse endereço no celular e faça o teste da Parte 7.
+
+PARTE 7 — TESTAR ANTES DE COMPARTILHAR
+1. Abra o site. Deve aparecer "Conectado. Atualizações em tempo real ativadas."
+2. Cadastre um participante de teste e escolha, por exemplo, 001 e 002.
+3. Abra o mesmo link em uma aba anônima ou outro celular. Os números devem aparecer verdes.
+4. Toque em 001. O nome e telefone de teste devem aparecer.
+5. Entre na área administrativa com e-mail e senha. Libere 001 e confira se fica cinza nos dois aparelhos.
+6. Teste duas tentativas simultâneas para o mesmo número. Apenas a primeira deve ser aceita.
+7. Apague os dados de teste antes de compartilhar o link.
+
+PARTE 8 — COMPARTILHAR
+Envie o mesmo endereço do GitHub Pages às outras três pessoas. Elas não precisam criar conta nem informar senha: o site faz o acesso anônimo automaticamente. A administradora entra pela Área administrativa.
+
+COMO USAR
+- Para selecionar números, toque nos números cinza ou digite números separados por vírgula.
+- Exemplo: 001, 015, 120.
+- Preencha nome e telefone e toque em Confirmar cadastro e reserva.
+- Números verdes estão ocupados; cinza estão disponíveis.
+- Ao tocar em um número verde, aparecem os dados cadastrados.
+- Somente a conta administrativa autenticada consegue liberar um número.
+
+SEGURANÇA E LIMITAÇÕES
+- A proteção administrativa está nas regras do Firestore, não apenas no botão do site.
+- A API key do Firebase no app web não é uma senha; as regras do banco são a proteção.
+- Os usuários anônimos podem consultar os registros e criar novas reservas, mas não editar nem apagar.
+- A administradora usa autenticação por e-mail e senha. Um PIN compartilhado no JavaScript não seria seguro.
+- O site exibe nome e telefone para qualquer pessoa que consiga abrir o link e autenticar anonimamente. Compartilhe o link com cuidado.
+- Não há painel para editar nome/telefone; para corrigir, a administradora pode liberar o número e cadastrar novamente.
+- O sistema usa a data/hora do aparelho para o campo createdAt; ela é informativa, não serve como comprovante oficial.
+- O plano gratuito tem limites de uso e pode mudar. Consulte https://firebase.google.com/pricing.
+- GitHub Pages hospeda arquivos estáticos; os dados ficam no Firestore.
+- Não envie a senha administrativa pelo grupo e não a coloque nos arquivos do site.
+
+SOLUÇÃO DE PROBLEMAS
+"Configuração pendente": app.js ainda contém os textos COLE_AQUI... ou COLOQUE_AQUI...
+"operation-not-allowed": ative Anonymous e Email/Password no Authentication.
+"permission-denied": confira se publicou as regras e se o e-mail nelas é exatamente o mesmo da conta administrativa.
+Site não atualiza: confira a internet, o projectId no app.js e se o Firestore foi criado.
+Tela em branco: confira se app.js foi enviado e se o GitHub Pages terminou a publicação.
